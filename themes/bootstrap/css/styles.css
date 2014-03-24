@@ -1,0 +1,37 @@
+#page {
+    padding-top: 80px;
+
+}
+.navbar-inner ul li a
+{
+    margin-top:10px;
+}
+
+.navbar-inner .nav ul li
+{
+    margin-top:10px;
+}
+
+.login-title
+{
+    background: url('../../../images/p5-header.png') no-repeat #f5f5f5;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 20px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    color: #cc6633;
+    opacity: 100%;
+    text-align: right;
+}
+.login-container
+{
+    margin: 10% 0 0 30%;
+    width: 500px;
+    /*background: url('../../../images/comodo_secure_100x85_transp.png') 35px 135px no-repeat;*/
+}
+
+#footer
+{
+    font-size:11px;
+    color: #333;
+}

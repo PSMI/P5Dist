@@ -1,0 +1,97 @@
+/* 
+    Document   : report
+    Created on : Mar 4, 2014, 12:20:00 AM
+    Author     : owliber
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/* max-witdh should be 700px */
+page 
+{
+    font-family:Courier; 
+    font-size:10px; 
+    width:100%;
+}
+
+#tbl-summary, #tbl-signature {font-size:11px}
+
+#tbl-summary, #tbl-signature, 
+#tbl-details, #tbl-lists, 
+#tbl-lists2, #tbl-lists3 {width:100%}
+
+#tbl-details th, #tbl-details td, 
+#tbl-summary th, #tbl-summary td, 
+#tbl-signature th, #tbl-signature td  {padding: 2px 5px 2px 10px;}
+
+#tbl-summary th {width:130px}
+#tbl-summary td {width:556px}
+
+#tbl-signature th {width:130px}
+#tbl-signature td {width:180px}
+
+#tbl-details th { width:120px}
+#tbl-details td { width:190px}
+
+/* Direct, Loan direct, loan completion */
+#tbl-lists th.ctr, #tbl-lists td.ctr {width:12px; padding:2px 2px; text-align:center}
+#tbl-lists th.name, #tbl-lists td.name {width:255px; padding:2px 0px 2px 10px;}
+#tbl-lists th.date, #tbl-lists td.date {width:150px; padding:2px 0px 2px 10px;}
+
+/* Unilevel */
+#tbl-lists2 th.ctr, #tbl-lists2 td.ctr {width:12px; padding:2px 2px; text-align:center}
+#tbl-lists2 th.name, #tbl-lists2 td.name {width:170px; padding:2px 0px 2px 10px;}
+#tbl-lists2 th.date, #tbl-lists2 td.date {width:104px; padding:2px 0px 2px 10px;}
+#tbl-lists2 th.amount, #tbl-lists2 td.amount {width:100px; padding:2px 2px 2px 10px; text-align:  right;}
+#tbl-lists2 th.total, #tbl-lists2 td.total {width:40px; padding:2px 2px 2px 10px; text-align:  right;}
+#tbl-lists2 th.status, #tbl-lists2 td.status {width:100px; padding:2px 2px 2px 10px;}
+
+/* GOC */
+#tbl-lists3 th.ctr, #tbl-lists3 td.ctr {width:13px; padding:2px 2px; text-align:center}
+#tbl-lists3 th.name, #tbl-lists3 td.name {width:245px; padding:2px 0px 2px 10px;}
+#tbl-lists3 th.date, #tbl-lists3 td.date {width:145px; padding:2px 0px 2px 10px;}
+
+table, table th, table td
+{
+    border:1px solid #ccc; 
+    border-collapse: collapse;
+}
+
+table th { background-color: #ccc; }
+
+.logo{
+    margin-top:10%;
+    margin-left:50%;
+    left: -70px;
+    margin-bottom: -10px;
+    position: relative;
+    width:140px;
+    height: 105px;
+    background: url(images/logo.png) top center no-repeat #fff;
+}
+
+.logo2{
+    margin-top:10%;
+    margin-left:50%;
+    left: -70px;
+    margin-bottom: -10px;
+    position: relative;
+    width:140px;
+    height: 137px;
+    background: url(images/sagip_logo.png) top center no-repeat #fff;
+}
+
+#footer
+{
+    padding-top:10px; 
+    position:absolute; 
+    float:bottom; 
+    bottom: 10px; 
+    border-top:1px solid #ccc
+}
+
+.address{font-size:8px;padding-top:4px;}
+
+
+
+
+
