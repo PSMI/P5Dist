@@ -118,13 +118,13 @@ class Mailer
     {
         $model = new RegistrationForm();
         
-        $member_id = $param['member_id'];
+        $distributor_id = $param['distributor_id'];
         
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::CHANGE_PASSWORD_TMPL);
                 
-        $members = new MembersModel();
-        $result = $members->selectMemberDetails($member_id);        
+        $distributors = new Distributors();
+        $result = $distributors->selectDistributorNameById($distributor_id);        
 
         $email = $result['email'];
         $member_name = $result['first_name'] . ' ' . $result['last_name'];
