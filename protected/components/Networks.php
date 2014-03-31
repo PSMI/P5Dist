@@ -372,7 +372,7 @@ class Networks extends Controller
      */
     public function getMemberName($member_id)
     {
-        $model = new MembersModel();
+        $model = new Members();
         $info = $model->selectMemberName($member_id);
         if(empty($info['last_name']) && empty($info['first_name']) && empty($info['middle_name'])) 
             $member_name = 'None';
@@ -434,6 +434,37 @@ class Networks extends Controller
         }
         
         return $array;
+    }
+    
+    /**
+     * This fucntion is used to retrieve the unilevel network of a member up to 10th level.
+     * @param type $member_id
+     * @param type $level
+     * @return type
+     */
+    public function getIPDUnilevel10thLevel($member_id, $level = 0)
+    {
+        $model = new Downlines();
+        $parent = array();
+        $children = array();
+        
+        $i = 0;
+        $level++;
+        
+        if ($level <= 10)
+        {
+            $downlines = $model->getIPDDirectEndorse($member_id);
+            foreach ($downlines as $key => $val)
+            {
+                $parent[$i][$level] = $downlines[$key]["downline"];
+                $children = array_merge($children, Networks::getIPDUnilevel10thLevel($downlines[$key]["downline"], $level));
+                $i++;
+            }
+        }
+        
+        $finalTree = array_merge($parent, $children);
+        
+        return $finalTree;
     }
 }
 ?>

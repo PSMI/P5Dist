@@ -50,5 +50,20 @@ class Members extends CFormModel
         
         return $result;
     }
+    
+    public static function checkUsername($username)
+    {
+        $query = "SELECT * FROM members
+                    WHERE username = :username";
+        
+        $sql = Yii::app()->db->createCommand($query);
+        $sql->bindParam(":username",$username);
+        $result = $sql->queryAll();
+        
+        if(count($result)> 0)
+            return true;
+        else
+            return false;
+    }
 }
 ?>
