@@ -118,13 +118,13 @@ class Mailer
     {
         $model = new RegistrationForm();
         
-        $distributor_id = $param['distributor_id'];
+        $member_id = $param['member_id'];
         
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::CHANGE_PASSWORD_TMPL);
                 
-        $distributors = new Distributors();
-        $result = $distributors->selectDistributorNameById($distributor_id);        
+        $members = new Members();
+        $result = $members->selectMemberDetails($member_id);        
 
         $email = $result['email'];
         $member_name = $result['first_name'] . ' ' . $result['last_name'];
@@ -167,7 +167,7 @@ class Mailer
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::DISAPPROVE_NOTIFY_TMPL);
                 
-        $members = new MembersModel();
+        $members = new Members();
         
         $downline_info = $members->selectMemberDetails($downline_id); 
         $upline_info = $members->selectMemberDetails($upline_id);
@@ -209,7 +209,7 @@ class Mailer
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::DISAPPROVE_NOTIFY_TMPL);
                 
-        $members = new MembersModel();
+        $members = new Members();
         
         $downline_info = $members->selectMemberDetails($downline_id); 
         $upline_info = $members->selectMemberDetails($upline_id);
@@ -250,7 +250,7 @@ class Mailer
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::MEMBER_NOTIFY_TMPL);
                 
-        $members = new MembersModel();
+        $members = new Members();
         
         $downline_info = $members->selectMemberDetails($downline_id); 
         $upline_info = $members->selectMemberDetails($upline_id);
@@ -293,7 +293,7 @@ class Mailer
         $reference = new ReferenceModel();
         $message_template = $reference->get_message_template(self::ACCOUNT_CREATION);
                 
-        $members = new MembersModel();
+        $members = new Members();
         $result = $members->selectMemberDetails($member_id);        
 
         $email = $result['email'];

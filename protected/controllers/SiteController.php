@@ -60,7 +60,7 @@ class SiteController extends Controller
 	 */
 	public function actionLogin()
 	{
-                if(isset(Yii::app()->session['distributor_id']) 
+                if(isset(Yii::app()->session['member_id']) 
                         && isset(Yii::app()->session['account_type_id']))
                         $this->redirect(array("site/index"));
             

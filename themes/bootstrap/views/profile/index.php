@@ -18,12 +18,12 @@
 ?>
 <div style="padding-top: 2%">
     <?php 
-        echo CHtml::hiddenField('distributor_id', $data['distributor_id']);
+        echo CHtml::hiddenField('member_id', $data['member_id']);
         echo CHtml::ajaxLink('[Edit Information]', 
             Yii::app()->createUrl('profile/info'),
             array(
                 'type'=>'post',
-                'data'=>array('id' => 'js:$("#distributor_id").val()'),
+                'data'=>array('id' => 'js:$("#member_id").val()'),
                 'success'=>'function(data){
                     $("#div-update").html(data);
                     $("#update-profile").dialog("open");
@@ -42,7 +42,7 @@
         <th>Username:</th><td><?php echo $data["username"]; ?></td>
     </tr>
     <tr>
-        <th>Password:</th><td><?php echo CHtml::link('Change Password?', '', array('onclick'=>'$("#change-password").dialog("open");')); ?></td>
+        <th>Password:</th><td><?php echo CHtml::link('Change Password?', '', array('onclick'=>'$("#change-password").dialog("open");', 'style'=>'cursor: pointer')); ?></td>
     </tr>
     <tr>
         <th>Name:</th><td><?php echo $data["last_name"] . ", " . $data["first_name"] . " " . $data["middle_name"]; ?></td>
@@ -120,7 +120,7 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
 $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
         'id'=>'update-profile',
         'options'=>array(
-            'title'=>'Contact Information',
+            'title'=>'Edit Information',
             'modal'=>true,
             'width'=>'680',
             'height'=>'auto',

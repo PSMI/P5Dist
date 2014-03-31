@@ -92,7 +92,7 @@ class LoginForm extends CFormModel
                         $distributor = Distributors::model()->findByAttributes(array('username'=>$this->username));
                         
                         Yii::app()->session['account_type_id'] = $distributor->account_type_id;
-                        Yii::app()->session['distributor_id'] = $distributor->distributor_id;
+                        Yii::app()->session['member_id'] = $distributor->member_id;
                         
 		}
 

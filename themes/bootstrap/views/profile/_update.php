@@ -32,7 +32,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     </tr>
     <tr>
         <td><?php 
-                  echo $form->hiddenField($model, 'distributor_id', array('value'=>$data['distributor_id']));
+                  echo $form->hiddenField($model, 'member_id', array('value'=>$data['member_id']));
                   
                   $this->widget('bootstrap.widgets.TbButton', array('buttonType'=>'ajaxSubmit', 
                         'url'=>Yii::app()->createUrl('profile/update'),

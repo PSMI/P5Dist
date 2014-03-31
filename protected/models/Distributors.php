@@ -7,7 +7,7 @@
 
 class Distributors extends CActiveRecord
 {
-    public $distributor_id;
+    public $member_id;
     public $address1;
     public $mobile_no;
     public $telephone_no;
@@ -23,7 +23,7 @@ class Distributors extends CActiveRecord
         return array(
                 array('email, address1, mobile_no, beneficiary_name', 'required'),
                 array('email', 'email'),
-                array('spouse_contact_no, telephone_no, tin_no, relationship, distributor_id', 'safe')
+                array('spouse_contact_no, telephone_no, tin_no, relationship, member_id', 'safe')
             );
     }
     
@@ -37,7 +37,7 @@ class Distributors extends CActiveRecord
      */
     public function tableName()
     {
-            return 'distributors';
+            return 'members';
     }
     
     // perform one-way encryption on the password before we store it in the database
@@ -49,7 +49,7 @@ class Distributors extends CActiveRecord
     
     public function getUserStatus($username)
     {
-        $query = "SELECT status FROM distributors 
+        $query = "SELECT status FROM members 
                   WHERE username = :username";
         $sql = Yii::app()->db->createCommand($query);
         $sql->bindParam(":username",$username);
@@ -68,7 +68,7 @@ class Distributors extends CActiveRecord
     
     public static function checkUsername($username)
     {
-        $query = "SELECT * FROM distributors
+        $query = "SELECT * FROM members
                     WHERE username = :username";
         
         $sql = Yii::app()->db->createCommand($query);
@@ -84,17 +84,17 @@ class Distributors extends CActiveRecord
     public function getDistributorName($id)
     {
         $query = "SELECT CONCAT(last_name, ' ', first_name) as distributor_name 
-                    FROM distributor_details
-                    WHERE distributor_id = :distributor_id";
+                    FROM member_details
+                    WHERE member_id = :member_id";
         $command = Yii::app()->db->createCommand($query);
-        $command->bindParam(':distributor_id', $id);
+        $command->bindParam(':member_id', $id);
         $result = $command->queryRow();
         return $result['distributor_name'];
     }
         
     public function getAccountType($username)
     {
-        $query = "SELECT account_type_id FROM distributors 
+        $query = "SELECT account_type_id FROM members 
                   WHERE username = :username";
         $sql = Yii::app()->db->createCommand($query);
         $sql->bindParam(":username",$username);
@@ -108,10 +108,10 @@ class Distributors extends CActiveRecord
     
     public function selectDistributorNameById($id)
     {        
-        $sql = "SELECT a.distributor_id, a.status, b.last_name, b.middle_name, b.first_name
-                FROM distributors a 
-                INNER JOIN distributor_details b ON a.distributor_id = b.distributor_id
-                WHERE a.distributor_id = :id";
+        $sql = "SELECT a.member_id, a.status, b.last_name, b.middle_name, b.first_name
+                FROM members a 
+                INNER JOIN member_details b ON a.member_id = b.member_id
+                WHERE a.member_id = :id";
         $command = Yii::app()->db->createCommand($sql);
         $command->bindParam(":id", $id);
         $result = $command->queryRow();
@@ -121,19 +121,19 @@ class Distributors extends CActiveRecord
     
     public function getProfileInfo($id)
     {        
-        $sql = "SELECT a.distributor_id, a.date_created, a.username, a.password, b.last_name, b.first_name, b.middle_name, 
+        $sql = "SELECT a.member_id, a.date_created, a.username, a.password, b.last_name, b.first_name, b.middle_name, 
                 CASE b.gender WHEN 1 THEN 'Male' WHEN 2 THEN 'Female' END AS gender,
                 CASE b.civil_status WHEN 1 THEN 'Single' WHEN 2 THEN 'Married' WHEN 3 THEN 'Divorced'
                 WHEN 4 THEN 'Separated' WHEN 5 THEN 'Widow' END AS civil_status,
                 b.birth_date, b.spouse_name, b.spouse_contact_no, b.beneficiary_name,
                 b.company, b.tin_no, b.email, b.address1, b.telephone_no, b.mobile_no, b.occupation,
                 b.relationship, a.endorser_id
-                FROM distributors a
-                INNER JOIN distributor_details b ON a.distributor_id = b.distributor_id
-                WHERE a.distributor_id = :distributor_id";
+                FROM members a
+                INNER JOIN member_details b ON a.member_id = b.member_id
+                WHERE a.member_id = :member_id AND a.account_type_id = 5";
         
         $command = Yii::app()->db->createCommand($sql);
-        $command->bindParam(':distributor_id', $id);
+        $command->bindParam(':member_id', $id);
         $result = $command->queryRow();
         
         return $result;
@@ -147,13 +147,13 @@ class Distributors extends CActiveRecord
         
         try
         {
-            $sql = "UPDATE distributors SET password = :password
-                    WHERE distributor_id = :distributor_id";
+            $sql = "UPDATE members SET password = :password
+                    WHERE member_id = :member_id";
             $command = $connection->createCommand($sql);
             
             $hashedPassword = md5($new_pass);
             
-            $command->bindValue(':distributor_id', $id);
+            $command->bindValue(':member_id', $id);
             $command->bindValue(':password', $hashedPassword);
             $rowCount = $command->execute();
             
@@ -176,14 +176,14 @@ class Distributors extends CActiveRecord
     {
         $connection = Yii::app()->db;
         
-        $sql = "SELECT a.distributor_id, b.spouse_contact_no, b.email, b.address1, b.telephone_no, b.mobile_no,
+        $sql = "SELECT a.member_id, b.spouse_contact_no, b.email, b.address1, b.telephone_no, b.mobile_no,
                 b.tin_no, b.relationship, b.beneficiary_name
-                FROM distributors a
-                INNER JOIN distributor_details b ON a.distributor_id = b.distributor_id
-                WHERE a.distributor_id = :distributor_id";
+                FROM members a
+                INNER JOIN member_details b ON a.member_id = b.member_id
+                WHERE a.member_id = :member_id";
         
         $command = $connection->createCommand($sql);
-        $command->bindParam(':distributor_id', $id);
+        $command->bindParam(':member_id', $id);
         $result = $command->queryRow();
         
         return $result;
@@ -197,12 +197,12 @@ class Distributors extends CActiveRecord
         
         try
         {
-            $sql = "UPDATE distributor_details SET email = :email, spouse_contact_no = :spouse_contact_no,
+            $sql = "UPDATE member_details SET email = :email, spouse_contact_no = :spouse_contact_no,
                     address1 = :address1, telephone_no = :telephone_no, mobile_no = :mobile_no,
                     beneficiary_name = :beneficiary_name, relationship = :relationship, tin_no = :tin_no
-                    WHERE distributor_id = :distributor_id";
+                    WHERE member_id = :member_id";
             $command = $connection->createCommand($sql);
-            $command->bindValue(':distributor_id', $this->distributor_id);
+            $command->bindValue(':member_id', $this->member_id);
             $command->bindValue(':email', $this->email);
             $command->bindValue(':address1', $this->address1);
             $command->bindValue(':telephone_no', $this->telephone_no);
