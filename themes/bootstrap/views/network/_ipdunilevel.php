@@ -23,9 +23,7 @@
     'heading'=>'My IPD Unilevel',
     'headingOptions'=>array('style'=>'font-size:200%')
 )); ?>
-
-<p style="font-size:14px"> All your direct endorsements will become your first level and the direct endorsements of your first level will become your second level and so on and so forth. 
-    To qualify in Unilevel Bonus, you must complete Five (5) direct endorsements.</p>
+<br/>
   <table with="100%" id="summary">
       <tr>
           <td width="15%" align="right">IPD Unilevel of</td>
@@ -35,10 +33,10 @@
           <td width="15%" align="right">Endorser</td>
           <td width="75%" class="data"><?php echo $genealogy['endorser']; ?></td>
       </tr>
-      <tr>
+<!--      <tr>
           <td width="15%" align="right">Upline</td>
           <td width="75%" class="data"><?php echo $genealogy['upline']; ?></td>
-      </tr>
+      </tr>-->
       <tr>
           <td align="right">Total network</td>
           <td class="data"><?php echo $genealogy['total']; ?></td>

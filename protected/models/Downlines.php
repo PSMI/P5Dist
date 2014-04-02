@@ -181,6 +181,7 @@ class Downlines extends CFormModel
                     m.date_joined as date_enrolled,
                     m.upline_id,
                     m.endorser_id,
+                    m.ipd_endorser_id,
                     m.placement_date
                   FROM members m
                     INNER JOIN member_details md ON m.member_id = md.member_id
@@ -228,7 +229,7 @@ class Downlines extends CFormModel
         $conn = $this->_connection;
         
         $query = "SELECT count(member_id) as count FROM members
-            WHERE endorser_id = :member_id AND placement_status = 1";
+            WHERE ipd_endorser_id = :member_id AND placement_status = 1";
         
         $command = $conn->createCommand($query);
         $command->bindParam(':member_id', $member_id);
@@ -302,7 +303,7 @@ class Downlines extends CFormModel
         $query = "SELECT
                     member_id AS downline
                   FROM members m
-                  WHERE m.endorser_id = :member_id AND placement_status = 1
+                  WHERE m.ipd_endorser_id = :member_id AND placement_status = 1
                   AND m.account_type_id = 5
                   ORDER BY placement_date ASC;";
         

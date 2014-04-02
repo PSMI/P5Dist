@@ -291,7 +291,7 @@ class Networks extends Controller
             $temp["Name"] = strtoupper($val["last_name"]) . ", " . $val["first_name"] . " " . $val["middle_name"];
             $temp["DateEnrolled"] = date("F d, Y", strtotime($val["date_enrolled"]));
             $temp["Upline"] = Networks::getMemberName($val["upline_id"]);
-            $temp["Endorser"] = Networks::getMemberName($val["endorser_id"]);
+            $temp["Endorser"] = Networks::getMemberName($val["ipd_endorser_id"]);
             $array[] = $temp;
         }
         

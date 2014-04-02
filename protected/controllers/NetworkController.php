@@ -23,12 +23,10 @@ class NetworkController extends Controller
         }
         $model = new Members();        
         $member = $model->selectMemberDetails($member_id);
-        $endorser_id = $member['endorser_id'];
-        $upline_id = $member['upline_id'];
+        $endorser_id = $member['ipd_endorser_id'];
         
         $genealogy['member'] = Networks::getMemberName($member_id);
         $genealogy['endorser'] = Networks::getMemberName($endorser_id);
-        $genealogy['upline'] = Networks::getMemberName($upline_id);
         
         $rawData = Networks::getIPDUnilevel10thLevel($member_id);
         $final = Networks::arrangeLevel($rawData);
