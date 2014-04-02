@@ -359,12 +359,12 @@ class RegistrationForm extends CFormModel
         $endorser_id = $this->member_id;
         $date_joined = $this->date_purchased;
         /* Insert distributor account info */
-        $query = "INSERT INTO members (account_type_id, activation_code, endorser_id, date_joined, placement_status, placement_date)
-                  VALUES (:account_type_id, :activation_code, :endorser_id, :date_joined, 1, NOW())";
+        $query = "INSERT INTO members (account_type_id, activation_code, ipd_endorser_id, date_joined, placement_status, placement_date)
+                  VALUES (:account_type_id, :activation_code, :ipd_endorser_id, :date_joined, 1, NOW())";
         $command = $conn->createCommand($query);
         $command->bindParam(':account_type_id', $account_type_id);
         $command->bindParam(':activation_code', $activation_code);
-        $command->bindParam(':endorser_id', $endorser_id);
+        $command->bindParam(':ipd_endorser_id', $endorser_id);
         $command->bindParam(':date_joined', $date_joined);
         $result = $command->execute();
         // Get the new member_id
@@ -416,7 +416,7 @@ class RegistrationForm extends CFormModel
                         $product_info = ProductsForm::selectProductById($this->product_code);
                         $product['member_id'] = $this->new_member_id;
                         $product['product_id'] = $this->product_code;
-                        $product['amount'] = $product_info['amount'];
+                        $product['srp'] = $product_info['srp'];
                         $product['date_purchased'] = $this->date_purchased;
                         $product['payment_mode_id'] = $this->payment_mode_id;
                         $result3 = $purchase->insertIPDPurchased($product);
