@@ -25,7 +25,7 @@ class ProfileController extends Controller
         
         $rawData = $model->getProfileInfo($login_id);
         
-        $endorserInfo = $members->selectMemberName($rawData["endorser_id"]);
+        $endorserInfo = $members->selectMemberName($rawData["ipd_endorser_id"]);
         
         if (isset($_POST["btnChange"]))
         {
