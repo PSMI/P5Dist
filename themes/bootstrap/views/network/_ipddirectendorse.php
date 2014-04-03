@@ -18,7 +18,7 @@
     'heading'=>'My IPD Direct Endorsements',
     'headingOptions'=>array('style'=>'font-size:200%')
 )); ?>
-<p style="font-size:14px"> Earn up to <strong>P<?php echo $payout; ?></strong> for every direct endorsement per entry.</p>
+<br/>
   <table with="100%" id="summary">
       <tr>
           <td align="right" width="25%">Total direct endorsements</td>

@@ -304,7 +304,6 @@ class Downlines extends CFormModel
                     member_id AS downline
                   FROM members m
                   WHERE m.ipd_endorser_id = :member_id AND placement_status = 1
-                  AND m.account_type_id = 5
                   ORDER BY placement_date ASC;";
         
         $command = $conn->createCommand($query);
