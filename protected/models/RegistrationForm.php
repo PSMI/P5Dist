@@ -448,16 +448,32 @@ class RegistrationForm extends CFormModel
                                     $member_info = $membersModel->selectMemberDetails($endorser_id);
                                     $has_ipd = $member_info["has_ipd"];
                                     $has_ipd += 1;
-                                    $query5 = "UPDATE members SET has_ipd = :has_ipd WHERE member_id = :endorser_id";
-                                    $command5 = $conn->createCommand($query5);
-                                    $command5->bindParam(':endorser_id', $endorser_id);
-                                    $command5->bindParam(':has_ipd', $has_ipd);
-                                    $result6 = $command5->execute();
+                                    $query6 = "UPDATE members SET has_ipd = :has_ipd WHERE member_id = :endorser_id";
+                                    $command6 = $conn->createCommand($query6);
+                                    $command6->bindParam(':endorser_id', $endorser_id);
+                                    $command6->bindParam(':has_ipd', $has_ipd);
+                                    $result6 = $command6->execute();
                                     if(count($result6) > 0)
                                     {
-                                        $trx->commit();
-                                        return array('result_code'=>0,
-                                                     'result_msg'=>'Registration successful');
+                                        $query7 = "INSERT INTO unprocessed_distributors (member_id, endorser_id)
+                                                    VALUES (:member_id, :ipd_endorser_id)";
+                                        $command7 = $conn->createCommand($query7);
+                                        $command7->bindParam(':member_id', $member_id);
+                                        $command7->bindParam(':ipd_endorser_id', $endorser_id);
+                                        $result7 = $command7->execute();
+                                        
+                                        if (count($result7) > 0)
+                                        {
+                                            $trx->commit();
+                                            return array('result_code'=>0,
+                                                         'result_msg'=>'Registration successful');
+                                        }
+                                        else
+                                        {
+                                            $trx->rollback();
+                                            return array('result_code'=>7,
+                                                     'result_msg'=>'Registration failed (Errcode:07)');
+                                        }
                                     }
                                     else
                                     {
