@@ -435,7 +435,6 @@ class Networks extends Controller
         
         return $array;
     }
-    
     /**
      * This fucntion is used to retrieve the unilevel network of a member up to 10th level.
      * @param type $member_id
@@ -447,10 +446,8 @@ class Networks extends Controller
         $model = new Downlines();
         $parent = array();
         $children = array();
-        
         $i = 0;
         $level++;
-        
         if ($level <= 10)
         {
             $downlines = $model->getIPDDirectEndorse($member_id);
@@ -461,9 +458,7 @@ class Networks extends Controller
                 $i++;
             }
         }
-        
         $finalTree = array_merge($parent, $children);
-        
         return $finalTree;
     }
     

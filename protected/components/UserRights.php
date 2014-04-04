@@ -26,7 +26,7 @@ class UserRights extends CWebUser
     }
         
     public function getId() {
-        return Yii::app()->session['member_id'];
+        return Yii::app()->session['distributor_id'];
     }
     
     public function getDistributorName()
