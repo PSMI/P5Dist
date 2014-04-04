@@ -130,7 +130,7 @@ class Distributors extends CActiveRecord
                 b.relationship, a.endorser_id, a.ipd_endorser_id
                 FROM members a
                 INNER JOIN member_details b ON a.member_id = b.member_id
-                WHERE a.member_id = :member_id AND a.account_type_id = 5";
+                WHERE a.member_id = :member_id";
         
         $command = Yii::app()->db->createCommand($sql);
         $command->bindParam(':member_id', $id);

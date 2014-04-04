@@ -9,14 +9,38 @@ $this->breadcrumbs = array('IPD Registration');
 
 ?>
 <script type="text/javascript">
+function validateUpline()
+{
+    var text_upline_name = $("#RegistrationForm_upline_name"),
+        hidden_upline = $("#RegistrationForm_upline_id");
+    
+    if (text_upline_name.val() != '') {
+        if (hidden_upline.val() == '') {
+            $("#RegistrationForm_upline_name").val("");
+        }
+    }
+    else {
+        hidden_upline.val("");
+    }
+}
+
 function submitForm()
 {
     $("#hidden_flag").val(1);
     $("#verticalForm").submit();
 }
 </script>
-<?php 
 
+<?php Yii::app()->clientScript->registerScript('ui','
+         
+     $(\'input[rel="tooltip"]\').tooltip();     
+     var upline_id = $("#RegistrationForm_upline_id"),
+         upline_name = $("#RegistrationForm[upline_name]");
+    
+ ', CClientScript::POS_END);
+ ?>
+
+<?php
 Yii::app()->user->setFlash('danger', '<strong>Important!</strong> Please make sure to fill-up all required information specially the email address as this is required for the activation of the new distributor account.');
 
 $this->widget('bootstrap.widgets.TbAlert', array(
@@ -43,13 +67,44 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 )); ?>
 
 <?php echo $form->hiddenField($model, 'member_id'); ?>
+<?php echo $form->hiddenField($model, 'upline_id'); ?>
 
-<h5>Distributor's Activation</h5>
+<h5>Placement Information</h5>
 <?php echo $form->textFieldRow($model,'activation_code', array(
         'class'=>'span3',
         'rel'=>'tooltip',
         'title'=>'Important: Please enter the 20 alphanumeric activation codes provided.',
-    )); ?>
+)); ?>
+
+<div class="control-group">
+<?php echo CHtml::label('Place under '. '<span class="required">*</span>', 'RegistrationForm_upline_id',array('class'=>'control-label required')) ?>
+    <div class="controls">   
+        <?php
+        
+        $this->widget('zii.widgets.jui.CJuiAutoComplete',array(
+                'model'=>$model,
+                'attribute'=>'upline_name',
+                'sourceUrl'=>  Yii::app()->createUrl('registration/placeUnderIPD'),
+                'options'=>array(
+                    'minLength'=>'2',
+                    'showAnim'=>'fold',
+                    'focus' => 'js:function(event, ui){upline_name.val(ui.item["value"])}',
+                    'select' => 'js:function(event, ui){upline_id.val(ui.item["id"]); }',
+                ),
+                'htmlOptions'=>array(
+                    'class'=>'span3',
+                    'rel'=>'tooltip',
+                    'title'=>'Please type your downline\'s name.',
+                    'autocomplete'=>'off',
+                    'onblur'=>'validateUpline()'
+                ),        
+            ));
+        
+        
+        ?>
+        <?php echo $form->error($model, 'upline_name'); ?>
+    </div>    
+</div>
 
 <h5>Distributor's Personal Information</h5>
 <?php echo $form->textFieldRow($model,'last_name', array('class'=>'span3')); ?>
@@ -104,7 +159,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <?php echo $form->textFieldRow($model,'relationship', array('class'=>'span4')); ?>
 
 <h5>Purchased Product Information</h5>
-<?php echo $form->dropDownListRow($model,'product_code', array(''=>Yii::t('none','Select product')) + $model->listProducts(), array('class'=>'span2')); ?>
+<?php echo $form->dropDownListRow($model,'product_code', array(''=>Yii::t('none','Select product')) + $model->listProductsByPackage(2), array('class'=>'span2')); ?>
 <div class="control-group">
 <?php echo CHtml::label('Date Purchased '. '<span class="required">*</span>', 'RegistrationForm_date_purchased',array('class'=>'control-label required')) ?>
     <div class="controls">  
@@ -226,7 +281,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <div class="modal-footer">
     <?php $this->widget('bootstrap.widgets.TbButton', array(
         'label'=>'Close',
-        'url'=>$this->errorCode > 0 ? '#' : array('registration/new'),
+        'url'=>$this->errorCode > 0 ? '#' : array('registration/ipdindex'),
         'htmlOptions'=>$this->errorCode > 0 ? array('data-dismiss'=>'modal') : "",
     )); ?>
 </div>

@@ -25,9 +25,8 @@ class RegistrationController extends Controller
         if (isset($_POST['RegistrationForm']) && $_POST['hidden_flag'] != 1)
         {
             $model->attributes = $_POST['RegistrationForm'];
+            
             // force required fields
-            $model->upline_id = 1;
-            $model->upline_name = 'Default: P5 ADMIN';
             $model->product_name = 'Default: P5 Water Purifier';
             if ($model->validate())
             {
@@ -93,6 +92,32 @@ class RegistrationController extends Controller
                         'pagination' => false
         ));
         $this->renderPartial('_ipdposition', array('dataProvider'=>$dataProvider));
+    }
+    
+    public function actionPlaceUnderIPD()
+    {
+        if(Yii::app()->request->isAjaxRequest && isset($_GET['term']))
+        {
+            $model = new RegistrationForm();
+
+            $result = $model->selectIPDDownlines($_GET['term']);
+
+            if(count($result)>0)
+            {
+                foreach($result as $row)
+                {
+                    $arr[] = array(
+                        'id'=>$row['member_id'],
+                        'value'=>$row['member_name'],
+                        'label'=>$row['member_name'],
+                    );
+                }
+
+                echo CJSON::encode($arr);
+                Yii::app()->end();
+            }
+            
+        }
     }
 }
 ?>

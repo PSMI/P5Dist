@@ -59,6 +59,7 @@ class Downlines extends CFormModel
                     member_id AS downline
                   FROM members
                   WHERE upline_id = :member_id
+                  AND account_type_id = 3
                   AND placement_status = 1
                   ORDER BY placement_date ASC;";
         
@@ -312,6 +313,29 @@ class Downlines extends CFormModel
         
         return $result;
         
+    }
+    
+    /**
+     * This function will be used for getting the IPD accounts for registration
+     * place under.
+     * @return type
+     */
+    public function selectIPDforPlaceUnder()
+    {
+        $conn = $this->_connection;
+        
+        $query = "SELECT
+                    member_id AS downline
+                  FROM members
+                  WHERE ipd_endorser_id = :member_id
+                  AND placement_status = 1
+                  ORDER BY placement_date ASC;";
+        
+        $command = $conn->createCommand($query);
+        $command->bindParam(':member_id', $this->member_id);
+        $result = $command->queryAll();
+        
+        return $result;  
     }
 }
 ?>

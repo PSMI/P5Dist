@@ -99,7 +99,7 @@ class RegistrationForm extends CFormModel
                 'spouse_contact_no'=>'Spouse Contact No',
                 'beneficiary_name'=>'Beneficiary Name',
                 'relationship'=>'Relationship',
-                'product_code'=>'Product Code',
+                'product_code'=>'Product Code/Set',
                 'product_name'=>'Product Name',
                 'date_purchased'=>'Date Purchased',
                 'payment_mode_id'=>'Payment Mode',
@@ -167,9 +167,9 @@ class RegistrationForm extends CFormModel
         return CHtml::listData($this->paymentTypes(), 'payment_type_id', 'payment_type_name');
     }
 
-    public function listProducts()
+    public function listProductsByPackage($package_type_id)
     {
-        return CHtml::listData(ProductsForm::selectAll(), 'product_id', 'product_name');
+        return CHtml::listData(ProductsForm::selectProductByPackageType($package_type_id), 'product_id', 'product_name');
     }
     
     public function selectDownlines($filter)
@@ -356,14 +356,17 @@ class RegistrationForm extends CFormModel
         
         $account_type_id = 5;
         $activation_code = $this->activation_code;
+        $upline_id = $this->upline_id;
         $endorser_id = $this->member_id;
         $date_joined = $this->date_purchased;
+        
         /* Insert distributor account info */
-        $query = "INSERT INTO members (account_type_id, activation_code, ipd_endorser_id, date_joined, placement_status, placement_date)
-                  VALUES (:account_type_id, :activation_code, :ipd_endorser_id, :date_joined, 1, NOW())";
+        $query = "INSERT INTO members (account_type_id, activation_code, ipd_upline_id, ipd_endorser_id, date_joined, placement_status, placement_date)
+                  VALUES (:account_type_id, :activation_code, :ipd_upline_id, :ipd_endorser_id, :date_joined, 1, NOW())";
         $command = $conn->createCommand($query);
         $command->bindParam(':account_type_id', $account_type_id);
         $command->bindParam(':activation_code', $activation_code);
+        $command->bindParam(':ipd_upline_id', $upline_id);
         $command->bindParam(':ipd_endorser_id', $endorser_id);
         $command->bindParam(':date_joined', $date_joined);
         $result = $command->execute();
@@ -519,6 +522,35 @@ class RegistrationForm extends CFormModel
                          'result_msg'=>'Registration failed (Errcode:x01)');
         }
     
+    }
+    
+    public function selectIPDDownlines($filter)
+    {
+        $conn = $this->_connection;        
+        $filter = "%".$filter."%";
+        
+        $model = new Downlines(); 
+        
+        $model->member_id = Yii::app()->user->getId();
+        
+        $placeUnder = Networks::getPlaceUnderIPD(Yii::app()->user->getId());
+        $downline_lists = Networks::autoComplete($placeUnder);
+        
+        $query = "SELECT
+                    m.member_id,
+                    CONCAT(COALESCE(md.last_name,' '), ', ', COALESCE(md.first_name,' '), ' ', COALESCE(md.middle_name,' ')) AS member_name
+                  FROM members m
+                    INNER JOIN member_details md ON m.member_id = md.member_id
+                  WHERE (md.last_name LIKE :filter
+                    OR md.first_name LIKE :filter
+                    OR md.middle_name LIKE :filter)
+                    AND m.member_id IN ($downline_lists)
+                  ORDER BY md.last_name";
+        
+        $command = $conn->createCommand($query);
+        $command->bindParam(':filter', $filter);
+        $result = $command->queryAll();        
+        return $result;
     }
     
 }

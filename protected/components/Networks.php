@@ -466,5 +466,28 @@ class Networks extends Controller
         
         return $finalTree;
     }
+    
+    /**
+     * This function is used to get the placed under of the member
+     * @param type $member_id
+     * @return type
+     */
+    public function getPlaceUnderIPD($member_id)
+    {
+        $model = new Downlines();
+        $model->member_id = $member_id;
+        $member_array = array();
+        
+        $member_array[] = $member_id;
+        
+        $downlines = $model->selectIPDforPlaceUnder();
+        for ($i = 0; $i < count($downlines); $i++)
+        {
+            $downline_id = $downlines[$i]["downline"];
+            $member_array = array_merge($member_array, Networks::getPlaceUnderIPD($downline_id));
+        }
+        
+        return $member_array;
+    }
 }
 ?>
