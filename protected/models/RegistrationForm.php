@@ -167,9 +167,9 @@ class RegistrationForm extends CFormModel
         return CHtml::listData($this->paymentTypes(), 'payment_type_id', 'payment_type_name');
     }
 
-    public function listProductsByPackage($package_type_id)
+    public function listProductsByPackage($product_id)
     {
-        return CHtml::listData(ProductsForm::selectProductByPackageType($package_type_id), 'product_id', 'product_name');
+        return CHtml::listData(ProductsForm::selectProductByPackageType($product_id), 'product_id', 'product_name');
     }
     
     public function selectDownlines($filter)

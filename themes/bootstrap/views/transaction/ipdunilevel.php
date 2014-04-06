@@ -4,7 +4,7 @@
  * Date Created: 03-29-2014
 ------------------------*/
 
-$this->breadcrumbs = array('Transactions'=>'#','IPD Unilevel');
+$this->breadcrumbs = array('Transactions'=>'#','Unilevel');
 
 Yii::app()->user->setFlash('info', '<strong>Information </strong>| Next cut-off date is on '.$next_cutoff.'.');
 
@@ -18,7 +18,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ));
 ?>
 
-<h3>IPD Unilevel</h3>
+<h3>Unilevel</h3>
 
 <?php
 //display table

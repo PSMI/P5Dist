@@ -24,7 +24,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                             'htmlOptions' => array('style' => 'text-align:center'), 
                             'headerHtmlOptions' => array('style' => 'text-align:center'),
                         ),
-                        array('name'=>'ibo_count',
+                        array('name'=>'ipd_count',
                             'header'=>'IPD Count',
                             'htmlOptions' => array('style' => 'text-align:center'),  
                             'headerHtmlOptions' => array('style' => 'text-align:center'),

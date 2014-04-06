@@ -36,15 +36,16 @@ class ProductsForm extends CFormModel
         return $result;
     }
     
-    public function selectProductByPackageType($package_type_id)
+    public function selectProductByPackageType($product_id)
     {
         $conn = $this->_connection;
         
         $query = "SELECT * FROM products a 
-                INNER JOIN product_groups b ON a.product_group_id = b.product_group_id
-                WHERE b.product_group_id = :product_group_id AND a.status = 1";
+                WHERE a.product_id = :product_id 
+                    AND a.is_package = 1 
+                    AND a.status = 1";
         $command = $conn->createCommand($query);
-        $command->bindParam(':product_group_id', $package_type_id);
+        $command->bindParam(':product_id', $product_id);
         $result = $command->queryAll();
         
         return $result;

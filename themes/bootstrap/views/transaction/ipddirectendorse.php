@@ -4,7 +4,7 @@
  * Date Created: 03-29-2014
 ------------------------*/
 
-$this->breadcrumbs = array('Transactions'=>'#','IPD Direct Endorsement');
+$this->breadcrumbs = array('Transactions'=>'#','Direct Endorsement');
 
 Yii::app()->user->setFlash('info', '<strong>Information </strong>| Next cut-off date is on '.$next_cutoff.'.');
 
@@ -18,7 +18,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ))
 ?>
 
-<h3>IPD Direct Endorsement</h3>
+<h3>Direct Endorsement</h3>
 
 <?php
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

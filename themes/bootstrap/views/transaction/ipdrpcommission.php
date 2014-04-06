@@ -4,7 +4,7 @@
  * Date Created: 03-29-2014
 ------------------------*/
 
-$this->breadcrumbs = array('Transactions'=>'#','IPD RP Commission');
+$this->breadcrumbs = array('Transactions'=>'#','Repeat Purchase Commission');
 
 Yii::app()->user->setFlash('info', '<strong>Information </strong>| Next cut-off date is on '.$next_cutoff.'.');
 
@@ -18,7 +18,7 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ));
 ?>
 
-<h3>IPD RP Commission</h3>
+<h3>Repeat Purchase Commission</h3>
 
 <?php
 //display table

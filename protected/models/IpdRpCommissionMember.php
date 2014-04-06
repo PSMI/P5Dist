@@ -25,7 +25,7 @@ class IpdRpCommissionMember extends CFormModel
         return array('cutoff_id'=>'Cut-Off Date');
     }
     
-    public function getIpdRpCommission()
+    public function getIpdRpCommission($member_id)
     {
         $conn = $this->_connection;
         
@@ -48,7 +48,7 @@ class IpdRpCommissionMember extends CFormModel
                       ON d.approved_by_id = md.member_id
                     LEFT OUTER JOIN member_details md2
                       ON d.claimed_by_id = md2.member_id
-                  WHERE d.member_id = 5 ORDER BY d.date_created DESC;";
+                  WHERE d.member_id = :member_id ORDER BY d.date_created DESC;";
         
         $command =  $conn->createCommand($query);
         $command->bindParam(':member_id', $member_id);
