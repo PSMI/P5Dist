@@ -162,18 +162,18 @@ class TransactionController extends Controller
         $this->render('ipdunilevel', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff));
     }
     
-    //For IPD Commission
-    public function actionIpdCommission()
+    //For IPD RP Commission
+    public function actionIpdRpCommission()
     {
-        $model = new CommissionMember();
+        $model = new IpdRpCommissionMember();
         $reference = new ReferenceModel();
         
-        $cutoff = $reference->get_cutoff_dates(TransactionTypes::UNILEVEL);
+        $cutoff = $reference->get_cutoff_dates(TransactionTypes::IPD_REPEAT_PURCHASE_COMMISSION);
         $next_cutoff = date('M d Y',strtotime($cutoff['next_cutoff_date']));
         
         $member_id = Yii::app()->user->getId();
 
-        $rawData = $model->getUnilevel($member_id);
+        $rawData = $model->getIpdRpCommission($member_id);
 
         $dataProvider = new CArrayDataProvider($rawData, array(
                                                 'keyField' => false,
@@ -182,7 +182,7 @@ class TransactionController extends Controller
                                             ),
                                 ));
 
-        $this->render('ipdcommission', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff));
+        $this->render('ipdrpcommission', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff));
     }
     
     public function getStatusForButtonDisplayLoan($status_id, $status_type)
