@@ -50,7 +50,8 @@ class Distributors extends CActiveRecord
     public function getUserStatus($username)
     {
         $query = "SELECT status FROM members 
-                  WHERE username = :username";
+                  WHERE username = :username
+                    AND account_type_id = 5";
         $sql = Yii::app()->db->createCommand($query);
         $sql->bindParam(":username",$username);
         $result = $sql->queryRow();
@@ -69,7 +70,8 @@ class Distributors extends CActiveRecord
     public static function checkUsername($username)
     {
         $query = "SELECT * FROM members
-                    WHERE username = :username";
+                    WHERE username = :username
+                        AND account_type_id = 5";
         
         $sql = Yii::app()->db->createCommand($query);
         $sql->bindParam(":username",$username);
