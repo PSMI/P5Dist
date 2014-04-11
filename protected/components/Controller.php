@@ -109,6 +109,18 @@ class Controller extends CController
                     return "Claimed";
                 }
             }
+            else if ($trans_type == 5)
+            {
+                //ipd retention
+                if($status_id == 0)
+                {
+                    return "Pending";
+                }
+                else
+                {
+                    return "Purchased";
+                }
+            }
         }
         
         public function dateFormat($date)

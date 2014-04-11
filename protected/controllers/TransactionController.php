@@ -14,10 +14,11 @@ class TransactionController extends Controller
         $model = new IpdDirectEndorsementMember();
         $reference = new ReferenceModel();
         
-        $cutoff = $reference->get_cutoff_dates(TransactionTypes::IPD_DIRECT_ENDORSE);////////CHANGE DIRECT_ENDORSE to IPD_DIRECT_ENDORSE
+        $cutoff = $reference->get_cutoff_dates(TransactionTypes::IPD_DIRECT_ENDORSE);
         $next_cutoff = date('M d Y',strtotime($cutoff['next_cutoff_date']));
 
         $member_id = Yii::app()->user->getId();
+        $total = $model->getPayoutTotal($member_id);
 
         $rawData = $model->getIpdDirectEndorsement($member_id);
 
@@ -28,9 +29,9 @@ class TransactionController extends Controller
                                             ),
                                 ));
 
-        $this->render('ipddirectendorse', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff));
+        $this->render('ipddirectendorse', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff, 'total'=>$total));
     }
-       
+    
     //For IPD Unilevel
     public function actionIpdUnilevel()
     {
@@ -66,6 +67,7 @@ class TransactionController extends Controller
         $member_id = Yii::app()->user->getId();
 
         $rawData = $model->getIpdRpCommission($member_id);
+        $total = $model->getPayoutTotal($member_id);
 
         $dataProvider = new CArrayDataProvider($rawData, array(
                                                 'keyField' => false,
@@ -74,7 +76,7 @@ class TransactionController extends Controller
                                             ),
                                 ));
 
-        $this->render('ipdrpcommission', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff));
+        $this->render('ipdrpcommission', array('dataProvider' => $dataProvider,'next_cutoff'=>$next_cutoff, 'total'=>$total));
     }
     
     public function actionIpdRetention()
@@ -221,39 +223,62 @@ class TransactionController extends Controller
             $cutoff = $reference->get_cutoff_by_id($cutoff_id);
             $date_from = date('Y-m-d',strtotime($cutoff['last_cutoff_date']));
             $date_to = date('Y-m-d',strtotime($cutoff['next_cutoff_date']));
-            $downline = Networks::getUnilevel($member_id);
+            $downline = Networks::getIPDUnilevel10thLevel($member_id);
             //$downline = Networks::getDownlines($member_id);
-            $unilevels = Networks::arrangeLevel($downline, 'ASC');
-            foreach($unilevels['network'] as $level)
-            {                    
-                $levels = $level['Level'];
-                 if($levels < 11)
-                 {
-                    if($model->is_first_transaction())
-                        $downlines = Networks::getUnilevelDownlines($level['Members']);
-                    else
-                        $downlines = Networks::getUnilevelDownlinesByCutOff($level['Members'],$date_from,$date_to);
-                    if(!is_null($downlines))
-                    {
-                        $unilevel['member_id'] = $member_id;
-                        $total =+ count($downlines);
-                        $unilevel['total'] = $total;
-                        $unilevel['level'] = $levels;                     
-                        $unilevel['downlines'] = $downlines;
-                        $unilevel_downlines[] = $unilevel;
-                    }
-                 }
-            }
             $html2pdf = Yii::app()->ePdf->HTML2PDF();
-            $html2pdf->WriteHTML($this->renderPartial('_ipdunilevelreport', array(
-                    'payee'=>$payee,
-                    'endorser'=>$endorser,
-                    'downlines'=>$unilevel_downlines,
-                    'cutoff'=>$cutoff,
-                    'payout'=>$payout,
-                ), true
-             ));
-            $html2pdf->Output('IPD_Unilevel_' . $payee_name . '_' . date('Y-m-d') . '.pdf', 'D'); 
+            
+            if (count($downline) > 1)
+            {
+                $unilevels = Networks::arrangeLevel($downline, 'ASC');
+                
+                foreach($unilevels['network'] as $level)
+                {                    
+                    $levels = $level['Level'];
+                     if($levels < 11)
+                     {
+                        if($model->is_first_transaction())
+                            $downlines = Networks::getUnilevelDownlines($level['Members']);
+                        else
+                            $downlines = Networks::getUnilevelDownlinesByCutOff($level['Members'],$date_from,$date_to);
+                        if(!is_null($downlines))
+                        {
+                            $unilevel['member_id'] = $member_id;
+                            $total =+ count($downlines);
+                            $unilevel['total'] = $total;
+                            $unilevel['level'] = $levels;                     
+                            $unilevel['downlines'] = $downlines;
+                            $unilevel_downlines[] = $unilevel;
+                        }
+                     }
+                }
+                
+                $html2pdf->WriteHTML($this->renderPartial('_ipdunilevelreport', array(
+                        'payee'=>$payee,
+                        'endorser'=>$endorser,
+                        'downlines'=>$unilevel_downlines,
+                        'cutoff'=>$cutoff,
+                        'payout'=>$payout,
+                    ), true
+                 ));
+            }
+            else
+            {
+                $payout['total_amount'] = 0;
+                $payout['ipd_count'] = 0;
+                $payout['tax_amount'] = 0;
+                $payout['net_amount'] = 0;
+            
+                $html2pdf->WriteHTML($this->renderPartial('_ipdunilevelreport', array(
+                        'payee'=>$payee,
+                        'endorser'=>$endorser,
+                        'downlines'=>$unilevel_downlines = Array(),
+                        'cutoff'=>$cutoff,
+                        'payout'=>$payout,
+                    ), true
+                 ));
+            }
+            
+            $html2pdf->Output('Distributor_Unilevel_' . $payee_name . '_' . date('Y-m-d') . '.pdf', 'D'); 
         }
     }   
     
@@ -261,16 +286,65 @@ class TransactionController extends Controller
     {
         $model = new IpdDirectEndorsementMember();
         $member_id = Yii::app()->user->getId();
+        
         $member_name_arr = $model->getMemberName($member_id);
         $member_name = $member_name_arr[0]['member_name'];
+        
         $direct_details = $model->getIpdDirectEndorsement($member_id);
+        $total = $model->getPayoutTotal($member_id);
+        
         $html2pdf = Yii::app()->ePdf->HTML2PDF();            
         $html2pdf->WriteHTML($this->renderPartial('_ipddirectsummaryreport', array(
                 'direct_details'=>$direct_details,
                 'member_name'=>$member_name,
+                'total'=>$total,
             ), true
          ));
-        $html2pdf->Output('IPD_Direct_Endorsement_Summary_' . date('Y-m-d') . '.pdf', 'D'); 
+        $html2pdf->Output('Distributor_Direct_Endorsement_Summary_' . date('Y-m-d') . '.pdf', 'D'); 
+        Yii::app()->end();
+    }
+    
+    public function actionIpdPdfRpCommissionSummary()
+    {
+        $model = new IpdRpCommissionMember();
+        $member_id = Yii::app()->user->getId();
+        
+        $member_name_arr = $model->getMemberName($member_id);
+        $member_name = $member_name_arr[0]['member_name'];
+        
+        $direct_details = $model->getIpdRpCommission($member_id);
+        $total = $model->getPayoutTotal($member_id);
+        
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();            
+        $html2pdf->WriteHTML($this->renderPartial('_ipdrpcommissionsummaryreport', array(
+                'direct_details'=>$direct_details,
+                'member_name'=>$member_name,
+                'total'=>$total,
+            ), true
+         ));
+        $html2pdf->Output('Distributor_Repeat_Purchase_Commission' . date('Y-m-d') . '.pdf', 'D'); 
+        Yii::app()->end();
+    }
+    
+    public function actionIpdPdfRetentionSummary()
+    {
+        $model = new RetentionMoney();
+        $member_id = Yii::app()->user->getId();
+        
+        $member_name_arr = $model->getMemberName($member_id);
+        $member_name = $member_name_arr[0]['member_name'];
+        
+        $direct_details = $model->getSavings($member_id);
+        $total = $model->getTotals($member_id);
+        
+        $html2pdf = Yii::app()->ePdf->HTML2PDF();            
+        $html2pdf->WriteHTML($this->renderPartial('_ipdretentionsummaryreport', array(
+                'direct_details'=>$direct_details,
+                'member_name'=>$member_name,
+                'total'=>$total,
+            ), true
+         ));
+        $html2pdf->Output('Distributor_Retention_Summary_' . date('Y-m-d') . '.pdf', 'D'); 
         Yii::app()->end();
     }
 }

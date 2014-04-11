@@ -7,11 +7,9 @@
 $this->widget('bootstrap.widgets.TbGridView', array(
         'id'=>'unilvl-grid',
         'type'=>'striped bordered condensed',
-        //'filter' => $model->search(),
         'dataProvider' => $dataProvider,
         'htmlOptions'=>array('style'=>'font-size:12px'),
         'enablePagination' => true,
-        //'template'=>"{items}",
         'columns' => array( 
                         array(
                             'header' => '',
@@ -20,7 +18,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                         ),
                         array('name'=>'date_created',
                             'header'=>'Transaction Date',
-                            //'value'=>'TransactionController::dateFormat($data["date_approved"])',
                             'htmlOptions' => array('style' => 'text-align:center'), 
                             'headerHtmlOptions' => array('style' => 'text-align:center'),
                         ),
@@ -37,7 +34,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                         ),
                         array('name'=>'date_approved',
                             'header'=>'Date Approved',
-                            //'value'=>'TransactionController::dateFormat($data["date_approved"])',
                             'htmlOptions' => array('style' => 'text-align:center'), 
                             'headerHtmlOptions' => array('style' => 'text-align:center'),
                         ),
@@ -48,7 +44,6 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                         ),
                         array('name'=>'date_claimed',
                             'header'=>'Date Claimed',
-                            //'value'=>'TransactionController::dateFormat($data["date_claimed"])',
                             'htmlOptions' => array('style' => 'text-align:center'), 
                             'headerHtmlOptions' => array('style' => 'text-align:center'),
                         ),
@@ -71,7 +66,7 @@ $this->widget('bootstrap.widgets.TbGridView', array(
                                 (
                                     'label'=>'Download',
                                     'icon'=>'icon-download-alt',
-                                    'url'=>'Yii::app()->createUrl("/transaction/ipdpdfunilevel", array("id" =>$data["member_id"], "cutoff_id" =>$data["cutoff_id"]))',
+                                    'url'=>'Yii::app()->createUrl("/transaction/ipdpdfunilevel", array("id" =>$data["distributor_id"], "cutoff_id" =>$data["cutoff_id"]))',
                                     'options' => array(
                                         'class'=>"btn btn-small",
                                     ),

@@ -4,7 +4,7 @@
  * Date Created: 03-29-2014
 ------------------------*/
 
-$this->breadcrumbs = array('Transactions'=>'#','Repeat Purchase Commission');
+$this->breadcrumbs = array('Transactions'=>'#','Distributor Repeat Purchase Commission');
 
 Yii::app()->user->setFlash('info', '<strong>Information </strong>| Next cut-off date is on '.$next_cutoff.'.');
 
@@ -18,14 +18,30 @@ $this->widget('bootstrap.widgets.TbAlert', array(
 ));
 ?>
 
-<h3>Repeat Purchase Commission</h3>
+<h3>Distributor Repeat Purchase Commission</h3>
 
 <?php
+$form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    'id'=>'searchForm',
+    'type'=>'search',
+    'htmlOptions'=>array('class'=>'well'),
+));
+
+$this->widget("bootstrap.widgets.TbButton", array(
+                                            "label"=>"Export to PDF",
+                                            //"icon"=>"icon-chevron-left",
+                                            "type"=>"info",
+                                            'url'=>'ipdpdfrpcommissionsummary',
+                                            //"htmlOptions"=>array("style"=>"float: right"),
+                                        ));
+$this->endWidget(); 
+
 //display table
 if (isset($dataProvider))
 {
     $this->renderPartial('_ipdrpcommissionview', array(
                 'dataProvider'=>$dataProvider,
+                'total'=>$total,
         ));
 }
 else

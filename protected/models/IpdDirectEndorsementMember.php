@@ -20,6 +20,7 @@ class IpdDirectEndorsementMember extends CFormModel
         $query = "SELECT
                     d.direct_endorsement_id,
                     CONCAT(md.last_name, ', ', md.first_name, ' ', md.middle_name) AS member_name,
+                    d.amount,
                     DATE_FORMAT(d.date_created,'%M %d, %Y') AS date_created,
                     DATE_FORMAT(d.date_approved,'%M %d, %Y') AS date_approved,
                     CONCAT(md2.last_name, ', ', md2.first_name, ' ', md2.middle_name) AS approved_by,
@@ -42,6 +43,23 @@ class IpdDirectEndorsementMember extends CFormModel
         
         return $result;
     }
+    
+    public function getPayoutTotal($member_id)
+    {
+        $conn = $this->_connection;
+        
+        $query = "SELECT
+                    SUM(d.amount) AS total
+                  FROM distributor_endorsements d
+                  WHERE d.endorser_id = :member_id;";
+        
+        $command =  $conn->createCommand($query);
+        $command->bindParam(':member_id', $member_id);
+        $result = $command->queryRow();     
+        
+        return $result;
+    }
+    
     public function getMemberName($member_id)
     {
         $conn = $this->_connection;

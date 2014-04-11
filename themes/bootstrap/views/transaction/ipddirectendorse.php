@@ -39,6 +39,7 @@ if (isset($dataProvider))
 {
     $this->renderPartial('_ipddirectendorseview', array(
                 'dataProvider'=>$dataProvider,
+                'total'=>$total,
         ));
 }
 else
