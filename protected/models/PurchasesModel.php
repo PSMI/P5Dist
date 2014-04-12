@@ -112,5 +112,65 @@ class PurchasesModel extends CFormModel
             $trx->rollback();
         }
     }
+    
+    /**
+     * @author Noel Antonio
+     * @date 04-12-2014
+     */
+    public function insertPurchasedItem($params)
+    {
+        $conn = $this->_connection;
+        
+        $member_id = $params['member_id'];
+        $product_id = $params['product_code'];
+        // $date_purchase = $params['date_purchased'];
+        $payment_mode = $params['payment_mode_id'];
+        
+        $product_info = ProductsForm::selectProductById($product_id);
+        $product_amount = $product_info['amount'];
+        
+        /* Insert purchased summary */
+        $query = "INSERT INTO purchased_summary (member_id, quantity, total, payment_type_id, status)
+                VALUES (:member_id, 1, :total, :payment_mode_id, 1)";
+        $command = $conn->createCommand($query);
+        $command->bindParam(':member_id', $member_id);
+        $command->bindParam(':total', $product_amount);
+        $command->bindParam(':payment_mode_id', $payment_mode);
+        $result = $command->execute();
+            
+        try
+        {
+            if ($result > 0)
+            {
+                $last_inserted_id = $conn->getLastInsertID();
+                
+                /* Insert purchased items */
+                $query2 = "INSERT INTO purchased_items (purchase_summary_id, product_id, quantity, total)
+                    VALUES (:purchased_summary_id, :product_id, 1, :total)";
+                $command2 = $conn->createCommand($query2);
+                $command2->bindParam(':purchased_summary_id', $last_inserted_id);
+                $command2->bindParam(':product_id', $product_id);
+                $command2->bindParam(':total', $product_amount);
+                $result2 = $command2->execute();
+                
+                if ($result2 > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (PDOException $e)
+        {
+            return false;
+        }
+    }
 }
 ?>
