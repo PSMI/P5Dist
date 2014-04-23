@@ -281,7 +281,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <div class="modal-footer">
     <?php $this->widget('bootstrap.widgets.TbButton', array(
         'label'=>'Close',
-        'url'=>$this->errorCode > 0 ? '#' : array('registration/ipdindex'),
+        'url'=>$this->errorCode > 0 ? '#' : array('registration/new'),
         'htmlOptions'=>$this->errorCode > 0 ? array('data-dismiss'=>'modal') : "",
     )); ?>
 </div>

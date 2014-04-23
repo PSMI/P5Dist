@@ -21,7 +21,7 @@ class RegistrationController extends Controller
     public function actionNew()
     {
         $model = new RegistrationForm();
-        $model->member_id = Yii::app()->session['member_id'];
+        $model->member_id = Yii::app()->user->getId();
         if (isset($_POST['RegistrationForm']) && $_POST['hidden_flag'] != 1)
         {
             $model->attributes = $_POST['RegistrationForm'];
