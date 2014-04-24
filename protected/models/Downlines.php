@@ -327,7 +327,7 @@ class Downlines extends CFormModel
         $query = "SELECT
                     member_id AS downline
                   FROM members
-                  WHERE ipd_endorser_id = :member_id
+                  WHERE ipd_upline_id = :member_id
                   AND placement_status = 1
                   ORDER BY placement_date ASC;";
         
