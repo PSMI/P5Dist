@@ -83,7 +83,7 @@ class TransactionController extends Controller
     {
         $model = new RetentionMoney();
         
-        $model->distributor_id = Yii::app()->user->getId();
+        $model->member_id = Yii::app()->user->getId();
         $rawData = $model->getSavings();
         $total = $model->getTotals();
 
