@@ -129,5 +129,6 @@ return array(
 		// this is used in contact page
 		'adminEmail'=>'admin@p5partners.com',
                 'companyName'=>'PSMI',
+                'distributor_url'=>'distributors.p5partners.com',
 	),
 );

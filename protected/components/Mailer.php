@@ -365,7 +365,7 @@ class Mailer
         $password = $param['plain_password'];
         $params = array('email'=>$email,
                         'code'=>$activation_code);
-        $verification_link = 'https://'. Yii::app()->params['distributor_url'] .  Yii::app()->createUrl('activation/verify', $params);
+        $verification_link = 'http://'. Yii::app()->params['distributor_url'] .  Yii::app()->createUrl('activation/verify', $params);
         $link = '<a href="'.$verification_link.'">'.$verification_link.'</a>';
         $placeholders = array('MEMBER_NAME'=>$member_name, 
                               'VERIFICATION_LINK'=>$link,
