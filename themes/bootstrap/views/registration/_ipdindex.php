@@ -116,7 +116,7 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <?php echo $form->dropDownListRow($model,'country_id', array(''=>Yii::t('none','Select country')) + $model->listCountries(), array('class'=>'span2')); ?>
 <?php echo $form->textFieldRow($model,'zip_code', array('class'=>'span1')); ?><br />
 <?php echo $form->dropDownListRow($model,'gender', array(''=>Yii::t('none','Select gender')) + array(1=>'Male',2=>'Female'), array('class'=>'span2')); ?>
-<?php echo $form->dropDownListRow($model,'civil_status', array(''=>Yii::t('none','Select civil status')) + array(1=>'Single',2=>'Married',3=>'Divorced',4=>'Separated'), array('class'=>'span2')); ?>
+<?php echo $form->dropDownListRow($model,'civil_status', array(''=>Yii::t('none','Select civil status')) + array(1=>'Single',2=>'Married',3=>'Divorced',4=>'Separated',5=>'Widow'), array('class'=>'span2')); ?>
 <div class="control-group">
 <?php echo CHtml::label('Birth Date '. '<span class="required">*</span>', 'RegistrationForm_birth_date',array('class'=>'control-label required')) ?>
     <div class="controls">  
