@@ -377,6 +377,8 @@ class RegistrationForm extends CFormModel
         {
             if(count($result) > 0)
             {
+                $complete_address = $this->address1 . " " . $this->address2 . " " . $this->address3;
+                
                 /* Insert distributor_details */
                 $query2 = "INSERT INTO member_details 
                                    (member_id, last_name, first_name, middle_name, address1, address2, address3, country_id, 
@@ -390,9 +392,9 @@ class RegistrationForm extends CFormModel
                 $command2->bindParam(':last_name', $this->last_name);
                 $command2->bindParam(':first_name', $this->first_name);
                 $command2->bindParam(':middle_name', $this->middle_name);
-                $command2->bindParam(':address1', $this->address1);
-                $command2->bindParam(':address2', $this->address2);
-                $command2->bindParam(':address3', $this->address3);
+                $command2->bindParam(':address1', $complete_address);
+                $command2->bindParam(':address2', $complete_address);
+                $command2->bindParam(':address3', $complete_address);
                 $command2->bindParam(':country_id', $this->country_id);
                 $command2->bindParam(':zip_code', $this->zip_code);
                 $command2->bindParam(':gender', $this->gender);

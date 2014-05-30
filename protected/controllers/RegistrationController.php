@@ -28,10 +28,13 @@ class RegistrationController extends Controller
             
             // force required fields
             $model->product_name = 'Default: P5 Water Purifier';
+            
             if ($model->validate())
             {
+                $activation_code = $model->activation_code;
+                
                 $activation = new ActivationCodeModel();
-                $result = $activation->validateActivationCode($model->activation_code, 2);
+                $result = $activation->validateActivationCode($activation_code, 2);
                 if(count($result) > 0)
                 {
                     $retname = $model->validateMemberName();
@@ -43,7 +46,17 @@ class RegistrationController extends Controller
                     }
                     else 
                     {
-                        $this->showConfirm = true;
+                        $exist_member_code = $activation->checkUsedCodeByMembers($activation_code);
+                        if ($exist_member_code > 0)
+                        {
+                            $this->dialogMessage = '<strong>Ooops!</strong> The activation code you have entered has already been used by another member. Please use another activation code.';
+                            $this->errorCode = 6;
+                            $this->showDialog = true;
+                        }
+                        else
+                        {
+                            $this->showConfirm = true;
+                        }
                     }
                 }
                 else

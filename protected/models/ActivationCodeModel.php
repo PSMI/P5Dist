@@ -154,5 +154,25 @@ class ActivationCodeModel extends CFormModel
         
         return $result;
     }
+    
+    /**
+     * @author Noel Antonio
+     * @date 05-30-2014
+     * @param type $activation_code
+     * @return type
+     */
+    public function checkUsedCodeByMembers($activation_code)
+    {
+        $conn = $this->_connection;
+                
+        $query = "SELECT COUNT(member_id) AS exist_member_code
+                    FROM members WHERE activation_code = :activation_code";
+        
+        $command = $conn->createCommand($query);
+        $command->bindParam(':activation_code', $activation_code);
+        $result = $command->queryRow();
+        
+        return $result['exist_member_code'];
+    }
 }
 ?>
